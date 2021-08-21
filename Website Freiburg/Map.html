@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>Interactive Visual Design 2 - Universität Ulm</title>
+
+  <!-- Stylesheets -->
+  <link href="./libs/style/normalize.css" rel="stylesheet" type="text/css" />
+  <link href="./libs/style/skeleton.css" rel="stylesheet" type="text/css" />
+  <link href="./styles/myStyle.css" rel="stylesheet" type="text/css" />
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet" />
+
+  <!-- Scripts -->
+  <script src="./libs/d3/d3.js" type="text/javascript" charset="utf-8"></script>
+  <script defer src="./scripts/myScript.js" type="text/javascript" charset="utf-8"></script>
+  <script src="./ressources/Grundwasserstände.js" type="text/javascript" charset="utf-8"></script>
+
+  <script src='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js'></script>
+<link href='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css' rel='stylesheet' />
+<meta charset="utf-8">
+<title>Add a line to a map using a GeoJSON source</title>
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js"></script>
+
+
+
+<style>
+body { margin: 0; padding: 0; }
+#map { position: absolute; top: 0; bottom: 0; width: 100%; }
+</style>
+</head>
+
+<body>
+  <div id="map"></div>
+  <script>
+    mapboxgl.accessToken = "pk.eyJ1IjoiY3B0amFubmlzIiwiYSI6ImNrcjR5Y2lnZDJ4aGgybnFodG1pamduNWEifQ.HEsdu7G953o8ntQ8LFSeew";
+    var map = new mapboxgl.Map({
+container: 'map',
+style: 'mapbox://styles/cptjannis/ckr4zie6y0y1k17murycct2ng',
+zoom: 12,
+center: [7.852280459576605, 47.9959546448699]
+});
+
+
+map.on('load', function () {
+
+  
+map.addSource('places', {
+// This GeoJSON contains features that include an "icon"
+// property. The value of the "icon" property corresponds
+// to an image in the Mapbox Streets style's sprite.
+
+
+'type': 'geojson',
+'data': {
+'type': 'FeatureCollection',
+'features': [
+{
+'type': 'Feature',
+'properties': {
+'description':
+'<strong><br>Fischbrunnen</p>',
+'icon': 'drinking-water-15'
+},
+
+'geometry': {
+'type': 'Point',
+'coordinates': [7.852280459576605, 47.9959546448699]
+}
+},
+
+
+{
+'type': 'Feature',
+'properties': {
+'description':
+'<strong><br>Löwenbrunnen</p>',
+'icon': 'drinking-water-15'
+},
+
+'geometry': {
+'type': 'Point',
+'coordinates': [7.852920847245059, 47.99467246481214]
+}
+},
+
+
+{
+'type': 'Feature',
+'properties': {
+'description':
+'<strong><br>Trinkwasser</p>',
+'icon': 'drinking-water-15'
+},
+
+'geometry': {
+'type': 'Point',
+'coordinates': [7.854646583844328, 47.99429361601696]
+}
+},
+
+
+{
+'type': 'Feature',
+'properties': {
+'description':
+'<strong><br>Trinkwasser</p>',
+'icon': 'drinking-water-15'
+},
+
+'geometry': {
+'type': 'Point',
+'coordinates': [7.853782177491553,47.99373295705422]
+}
+},
+
+]
+}
+});
+// Add a layer showing the places.
+map.addLayer({
+'id': 'places',
+'type': 'symbol',
+'source': 'places',
+'layout': {
+'icon-image': '{icon}',
+'icon-allow-overlap': true
+}
+});
+ 
+// When a click event occurs on a feature in the places layer, open a popup at the
+// location of the feature, with description HTML from its properties.
+map.on('click', 'places', function (e) {
+var coordinates = e.features[0].geometry.coordinates.slice();
+var description = e.features[0].properties.description;
+ 
+// Ensure that if the map is zoomed out such that multiple
+// copies of the feature are visible, the popup appears
+// over the copy being pointed to.
+while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+coordinates[0] += e.lngLat.lng > coordinates[0] ? 200 : 200;
+}
+ 
+new mapboxgl.Popup()
+.setLngLat(coordinates)
+.setHTML(description)
+.addTo(map);
+});
+ 
+// Change the cursor to a pointer when the mouse is over the places layer.
+map.on('mouseenter', 'places', function () {
+map.getCanvas().style.cursor = 'pointer';
+});
+ 
+// Change it back to a pointer when it leaves.
+map.on('mouseleave', 'places', function () {
+map.getCanvas().style.cursor = '';
+});
+});
+
+
+
+
+
+  </script>
+   
+  </body>
